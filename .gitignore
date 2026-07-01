@@ -1,0 +1,10 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+
+# dependencies (this app has none — pure static)
+node_modules/
+
+# vercel local
+.vercel/

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <title>Questly — Daily Quests & Rewards</title>
+  <meta name="description" content="Turn homework and chores into quests. Earn points, keep streaks, level up, and cash in weekly rewards. Built to be ADHD-friendly." />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#F1ECF6" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#201A2A" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Questly" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/styles.css?v=8" />
+</head>
+<body>
+  <!-- ambient background -->
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="grain"></span>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="topbar-lead">
+        <div class="hello" id="greeting">Hi</div>
+        <div class="today-date" id="todayDate"></div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btnBrainDump" aria-label="Brain dump" title="Brain dump">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <g fill="#B9AEDD">
+              <circle cx="9" cy="12.5" r="4"/><circle cx="15" cy="11.5" r="4.6"/><circle cx="12" cy="10" r="3.6"/>
+              <rect x="5.5" y="12.5" width="13" height="6" rx="3"/>
+            </g>
+            <circle cx="10.4" cy="13.4" r="0.9" fill="#6E5C86"/><circle cx="14" cy="13.1" r="0.9" fill="#6E5C86"/>
+            <circle cx="9" cy="14.6" r="1" fill="#F2A8BE"/><circle cx="15.4" cy="14.3" r="1" fill="#F2A8BE"/>
+            <path d="M11 15 Q12.2 16 13.4 14.9" stroke="#6E5C86" stroke-width="0.9" fill="none" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="btnSettings" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="scroll">
+      <!-- ===================== TODAY ===================== -->
+      <section class="view" data-view="today">
+        <div class="mascot" id="mascot" hidden>
+          <span class="mascot-pet" id="mascotPet">🥚</span>
+          <div class="mascot-speech">
+            <b id="mascotName">Sprout</b>
+            <p id="mascotMsg">Ready when you are.</p>
+          </div>
+          <span class="mascot-mood" id="mascotMood">😴</span>
+        </div>
+
+        <div class="stat-strip">
+          <button class="stat stat-level" data-goto="you">
+            <span class="stat-ico"><svg viewBox="0 0 24 24" width="23" height="23"><path d="M13 2.5 L5.5 13 h4.3 l-1.3 8.5 L18.5 10.2 h-4.6 Z" fill="#F6D06B" stroke="#E3B23C" stroke-width="1" stroke-linejoin="round"/></svg></span>
+            <span class="stat-body"><b id="statLevel">Lv 1</b><small id="statLevelSub">0 XP</small></span>
+          </button>
+          <button class="stat stat-points" data-goto="rewards">
+            <span class="stat-ico"><svg viewBox="0 0 24 24" width="23" height="23"><circle cx="12" cy="12" r="8.5" fill="#F3C34E" stroke="#E0A93A" stroke-width="1.6"/><circle cx="12" cy="12" r="5.3" fill="none" stroke="#E7B54A" stroke-width="1.2"/><path d="M12 8.7 l0.85 1.75 1.9 .2 -1.4 1.3 .45 1.9 -1.8 -1 -1.8 1 .45 -1.9 -1.4 -1.3 1.9 -.2 Z" fill="#FBE7A0"/></svg></span>
+            <span class="stat-body"><b id="statPoints">0</b><small>points</small></span>
+          </button>
+          <button class="stat stat-streak" data-goto="you">
+            <span class="stat-ico"><svg viewBox="0 0 24 24" width="23" height="23"><path d="M12.5 2.5 C13.5 7 17.5 8.5 16.8 13.3 A5 5 0 1 1 7.3 13 C6.9 10.5 8.6 9.4 8.6 9.4 C8.9 11.2 10.4 11.6 10.9 10.1 C11.5 8 10.4 5 12.5 2.5 Z" fill="#F1936B"/><path d="M12 20 A3 3 0 0 1 9.6 15.4 C10.1 13.6 11.1 13.8 11.5 15 C11.9 13.4 13 13.9 13 15.3 A3 3 0 0 1 12 20 Z" fill="#FBD36B"/></svg></span>
+            <span class="stat-body"><b id="statStreak">0</b><small>day streak</small></span>
+          </button>
+        </div>
+
+        <div class="card weekly-card">
+          <div class="weekly-ring">
+            <svg viewBox="0 0 120 120" width="112" height="112">
+              <circle class="ring-track" cx="60" cy="60" r="52" />
+              <circle class="ring-fill" id="weekRing" cx="60" cy="60" r="52" transform="rotate(-90 60 60)" />
+            </svg>
+            <div class="ring-center">
+              <b id="weekPct">0%</b>
+              <small>week</small>
+            </div>
+          </div>
+          <div class="weekly-info">
+            <h2>Weekly goal</h2>
+            <p class="weekly-nums"><b id="weekPts">0</b> / <span id="weekGoal">0</span> pts</p>
+            <p class="weekly-sub" id="weekSub">Finish quests to fill the ring.</p>
+            <div class="weekly-bar"><span id="weekBar"></span></div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h3 id="todayTitle">Today's quests</h3>
+          <span class="pill" id="todayCount">0 / 0</span>
+        </div>
+
+        <div id="todayList" class="quest-list"></div>
+
+        <div id="todayEmpty" class="empty" hidden>
+          <div class="empty-emoji">🌱</div>
+          <p><b>No quests for today yet.</b></p>
+          <p class="muted">Add your homework, chores or routines and they'll show up here.</p>
+          <button class="btn btn-primary" data-goto="tasks">+ Add your first quest</button>
+        </div>
+
+        <button class="btn btn-ghost add-inline" data-add-task>+ Quick add a quest</button>
+      </section>
+
+      <!-- ===================== TASKS (MANAGE) ===================== -->
+      <section class="view" data-view="tasks" hidden>
+        <div class="section-head">
+          <h3>My quests</h3>
+          <button class="btn btn-primary btn-sm" data-add-task>+ New</button>
+        </div>
+        <p class="muted manage-hint">These repeat automatically on the days you choose.</p>
+        <div id="taskManageList" class="manage-list"></div>
+        <div id="taskManageEmpty" class="empty" hidden>
+          <div class="empty-emoji">📝</div>
+          <p><b>No quests set up.</b></p>
+          <p class="muted">Create recurring homework, chores and routines.</p>
+          <button class="btn btn-primary" data-add-task>+ Create a quest</button>
+        </div>
+      </section>
+
+      <!-- ===================== REWARDS ===================== -->
+      <section class="view" data-view="rewards" hidden>
+        <div class="reward-balance">
+          <span class="rb-ico">🪙</span>
+          <div><b id="rewardBalance">0</b><small>points to spend</small></div>
+        </div>
+        <div class="section-head">
+          <h3>Reward store</h3>
+          <button class="btn btn-primary btn-sm" data-add-reward>+ New</button>
+        </div>
+        <p class="muted">Pick your own treats. Spend points anytime you've earned them.</p>
+        <div id="rewardList" class="reward-grid"></div>
+        <div id="rewardEmpty" class="empty" hidden>
+          <div class="empty-emoji">🎁</div>
+          <p><b>No rewards yet.</b></p>
+          <p class="muted">Add things worth working for — screen time, a treat, an outing.</p>
+          <button class="btn btn-primary" data-add-reward>+ Add a reward</button>
+        </div>
+
+        <div class="section-head" id="historyHead" hidden><h3>Recently redeemed</h3></div>
+        <div id="redeemHistory" class="history-list"></div>
+      </section>
+
+      <!-- ===================== YOU (STATS) ===================== -->
+      <section class="view" data-view="you" hidden>
+        <div class="card hero-level">
+          <div class="hero-top">
+            <div class="level-badge"><span id="youLevel">1</span></div>
+            <div class="hero-meta">
+              <h2 id="youTitle">Getting started</h2>
+              <p class="muted"><span id="youXpInto">0</span> / <span id="youXpNeed">100</span> XP to level <span id="youNextLevel">2</span></p>
+            </div>
+          </div>
+          <div class="xp-bar"><span id="youXpBar"></span></div>
+        </div>
+
+        <div class="mini-grid">
+          <div class="mini"><span class="mini-ico">🔥</span><b id="youStreak">0</b><small>current streak</small></div>
+          <div class="mini"><span class="mini-ico">🏆</span><b id="youBest">0</b><small>best streak</small></div>
+          <div class="mini"><span class="mini-ico">✅</span><b id="youDone">0</b><small>quests done</small></div>
+          <div class="mini"><span class="mini-ico">💎</span><b id="youTotal">0</b><small>points earned</small></div>
+        </div>
+
+        <div class="section-head"><h3>This week</h3></div>
+        <div class="week-chart" id="weekChart"></div>
+
+        <div class="section-head"><h3>Badges</h3></div>
+        <div class="badge-grid" id="badgeGrid"></div>
+      </section>
+    </main>
+
+    <!-- BOTTOM NAV -->
+    <nav class="tabbar" role="tablist">
+      <button class="tab is-active" data-tab="today"><span class="tab-ico">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none">
+          <g stroke="#F6C045" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="2.5" x2="12" y2="4.6"/><line x1="12" y1="19.4" x2="12" y2="21.5"/>
+            <line x1="2.5" y1="12" x2="4.6" y2="12"/><line x1="19.4" y1="12" x2="21.5" y2="12"/>
+            <line x1="5.2" y1="5.2" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="18.8" y2="18.8"/>
+            <line x1="5.2" y1="18.8" x2="6.7" y2="17.3"/><line x1="17.3" y1="6.7" x2="18.8" y2="5.2"/>
+          </g>
+          <circle cx="12" cy="12" r="5.6" fill="#FCD360"/>
+          <circle cx="10.2" cy="11.4" r="0.9" fill="#7A5E74"/><circle cx="13.8" cy="11.4" r="0.9" fill="#7A5E74"/>
+          <circle cx="9.2" cy="13" r="1.1" fill="#F69FB4"/><circle cx="14.8" cy="13" r="1.1" fill="#F69FB4"/>
+          <path d="M10.4 13.4 Q12 14.8 13.6 13.4" stroke="#7A5E74" stroke-width="0.9" stroke-linecap="round"/>
+        </svg></span><span>Today</span></button>
+      <button class="tab" data-tab="tasks"><span class="tab-ico">
+        <svg viewBox="0 0 24 24" width="26" height="26">
+          <rect x="4.5" y="3.5" width="15" height="17" rx="3.5" fill="#FFFFFF" stroke="#CDB8E0" stroke-width="1.4"/>
+          <line x1="8" y1="8.2" x2="16" y2="8.2" stroke="#D8CEE8" stroke-width="1.6" stroke-linecap="round"/>
+          <line x1="8" y1="11.6" x2="14" y2="11.6" stroke="#D8CEE8" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M8 15.4 l2 2 3.6-4.2" fill="none" stroke="#8AAE86" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg></span><span>Quests</span></button>
+      <button class="tab tab-fab" data-add-task aria-label="Add quest"><span class="fab">+</span></button>
+      <button class="tab" data-tab="rewards"><span class="tab-ico">
+        <svg viewBox="0 0 24 24" width="26" height="26">
+          <rect x="4" y="10" width="16" height="10" rx="2.5" fill="#E6A6C6"/>
+          <rect x="3" y="7.5" width="18" height="4" rx="1.6" fill="#EFC0D6"/>
+          <rect x="10.6" y="7.5" width="2.8" height="12.5" fill="#B58FD6"/>
+          <path d="M12 7.6 C10.2 4.6 6.6 5.2 8.2 7.6 Z" fill="#C9A3E0"/>
+          <path d="M12 7.6 C13.8 4.6 17.4 5.2 15.8 7.6 Z" fill="#C9A3E0"/>
+        </svg></span><span>Rewards</span></button>
+      <button class="tab" data-tab="you"><span class="tab-ico">
+        <svg viewBox="0 0 24 24" width="26" height="26">
+          <path d="M12 3 L14.12 9.09 L20.56 9.22 L15.42 13.11 L17.29 19.28 L12 15.6 L6.71 19.28 L8.58 13.11 L3.44 9.22 L9.88 9.09 Z" fill="#F6D06B"/>
+          <circle cx="10.3" cy="11.4" r="0.85" fill="#7A5E74"/><circle cx="13.7" cy="11.4" r="0.85" fill="#7A5E74"/>
+          <circle cx="9.2" cy="12.7" r="1" fill="#F69FB4"/><circle cx="14.8" cy="12.7" r="1" fill="#F69FB4"/>
+          <path d="M10.6 13 Q12 14.1 13.4 13" stroke="#7A5E74" stroke-width="0.85" fill="none" stroke-linecap="round"/>
+        </svg></span><span>You</span></button>
+    </nav>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div id="onboard" class="onboard" hidden>
+    <div class="onboard-card">
+      <div class="onboard-emoji">✦</div>
+      <h1>Welcome to Questly</h1>
+      <p>Turn homework, chores and routines into quests. Earn points, build streaks, level up and cash in rewards you choose.</p>
+      <label class="field">
+        <span>What should I call you?</span>
+        <input id="obName" type="text" placeholder="Your name" maxlength="24" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Weekly points goal</span>
+        <input id="obGoal" type="number" value="300" min="20" step="10" inputmode="numeric" />
+        <small class="field-hint">How many points a great week looks like. You can change it later.</small>
+      </label>
+      <button class="btn btn-primary btn-lg" id="obStart">Start my journey →</button>
+      <button class="btn btn-ghost" id="obSample">Load example quests & rewards</button>
+    </div>
+  </div>
+
+  <!-- MODAL HOST -->
+  <div id="modalRoot"></div>
+
+  <!-- CELEBRATION / TOAST HOST -->
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div id="toastRoot" class="toast-root" aria-live="polite"></div>
+  <div id="floatRoot" class="float-root" aria-hidden="true"></div>
+
+  <script src="js/icons.js?v=8"></script>
+  <script src="js/app.js?v=9" type="module"></script>
+</body>
+</html>
