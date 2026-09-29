@@ -1,11 +1,11 @@
 // Questly service worker — offline app shell caching
-const CACHE = 'questly-v3';
+const CACHE = 'questly-v4';
 const ASSETS = [
   './',
   './index.html',
   './css/styles.css?v=8',
   './js/icons.js?v=8',
-  './js/app.js?v=9',
+  './js/app.js?v=10',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',

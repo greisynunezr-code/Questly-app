@@ -1,0 +1,295 @@
+{
+  "pack": "My Home Cleaning Checklist",
+  "tasks": [
+    {
+      "title": "Make beds",
+      "emoji": "bed",
+      "category": "chores",
+      "points": 5,
+      "recur": {
+        "days": [],
+        "type": "daily"
+      }
+    },
+    {
+      "title": "Wash dishes",
+      "emoji": "cup",
+      "category": "chores",
+      "points": 5,
+      "recur": {
+        "days": [],
+        "type": "daily"
+      }
+    },
+    {
+      "title": "Scrub sink",
+      "emoji": "water",
+      "category": "chores",
+      "points": 5,
+      "recur": {
+        "days": [],
+        "type": "daily"
+      }
+    },
+    {
+      "title": "Wipe counters & surfaces",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 5,
+      "recur": {
+        "days": [],
+        "type": "daily"
+      }
+    },
+    {
+      "title": "Vacuum floors",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 5,
+      "recur": {
+        "days": [],
+        "type": "daily"
+      }
+    },
+    {
+      "title": "Wipe downstairs bathroom",
+      "emoji": "water",
+      "category": "chores",
+      "points": 5,
+      "recur": {
+        "days": [],
+        "type": "daily"
+      }
+    },
+    {
+      "title": "Wipe out fridge",
+      "emoji": "salad",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          1
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Wipe hood",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          1
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Tidy pantry",
+      "emoji": "basket",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          2
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Mop floors",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          2
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Clean bathrooms",
+      "emoji": "water",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          3
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Clean sink drains",
+      "emoji": "water",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          4
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Dust furniture",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          4
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Wash bedding",
+      "emoji": "bed",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          5
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Tidy car",
+      "emoji": "star",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          6
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Laundry",
+      "emoji": "basket",
+      "category": "chores",
+      "points": 10,
+      "recur": {
+        "days": [
+          6
+        ],
+        "type": "custom"
+      }
+    },
+    {
+      "title": "Replace air filter",
+      "emoji": "cloud",
+      "category": "chores",
+      "points": 20,
+      "recur": {
+        "days": [],
+        "type": "monthly",
+        "dom": 1
+      }
+    },
+    {
+      "title": "Deep clean appliances",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 20,
+      "recur": {
+        "days": [],
+        "type": "monthly",
+        "dom": 8
+      }
+    },
+    {
+      "title": "Clean out garage",
+      "emoji": "trash",
+      "category": "chores",
+      "points": 20,
+      "recur": {
+        "days": [],
+        "type": "monthly",
+        "dom": 15
+      }
+    },
+    {
+      "title": "Vacuum out vehicles",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 20,
+      "recur": {
+        "days": [],
+        "type": "monthly",
+        "dom": 22
+      }
+    },
+    {
+      "title": "Clean fans and lights",
+      "emoji": "sun",
+      "category": "chores",
+      "points": 30,
+      "recur": {
+        "days": [],
+        "type": "quarterly",
+        "dom": 3
+      }
+    },
+    {
+      "title": "Clean windows",
+      "emoji": "sun",
+      "category": "chores",
+      "points": 30,
+      "recur": {
+        "days": [],
+        "type": "quarterly",
+        "dom": 6
+      }
+    },
+    {
+      "title": "Wipe baseboards/doors",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 30,
+      "recur": {
+        "days": [],
+        "type": "quarterly",
+        "dom": 10
+      }
+    },
+    {
+      "title": "Wipe down cabinets",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 30,
+      "recur": {
+        "days": [],
+        "type": "quarterly",
+        "dom": 13
+      }
+    },
+    {
+      "title": "Clean furniture",
+      "emoji": "broom",
+      "category": "chores",
+      "points": 30,
+      "recur": {
+        "days": [],
+        "type": "quarterly",
+        "dom": 17
+      }
+    },
+    {
+      "title": "Deep clean dryer and washer",
+      "emoji": "basket",
+      "category": "chores",
+      "points": 30,
+      "recur": {
+        "days": [],
+        "type": "quarterly",
+        "dom": 20
+      }
+    }
+  ]
+}

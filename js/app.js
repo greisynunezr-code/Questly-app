@@ -162,16 +162,25 @@ function longestStreak() {
 /* recurrence */
 function isDueOn(task, dateKey) {
   if (!task.active) return false;
-  const dow = new Date(dateKey + 'T00:00:00').getDay();
+  const d = new Date(dateKey + 'T00:00:00');
+  const dow = d.getDay();
   switch (task.recur.type) {
     case 'daily':    return true;
     case 'weekdays': return dow >= 1 && dow <= 5;
     case 'weekends': return dow === 0 || dow === 6;
     case 'custom':   return (task.recur.days || []).includes(dow);
     case 'once':     return task.recur.date === dateKey;
+    case 'monthly':  return d.getDate() === monthDay(task.recur, d);
+    case 'quarterly': return d.getMonth() % 3 === 0 && d.getDate() === monthDay(task.recur, d);
     default:         return false;
   }
 }
+// day of month a monthly/quarterly task lands on (clamped so "31st" still happens in short months)
+function monthDay(recur, d) {
+  const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  return Math.min(recur.dom || 1, last);
+}
+function ordinal(n) { const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
 function todaysTasks() { const k = todayKey(); return state.tasks.filter(t => isDueOn(t, k)); }
 function isCompleted(taskId, k = todayKey()) { return (state.completions[k] || []).some(c => c.taskId === taskId); }
 // effective start/reminder time for a task on a given date (per-day override, else default)
@@ -420,6 +429,8 @@ function recurLabel(r) {
   if (r.type === 'weekdays') return 'Weekdays';
   if (r.type === 'weekends') return 'Weekends';
   if (r.type === 'once') return 'One-time';
+  if (r.type === 'monthly') return `Monthly on the ${ordinal(r.dom || 1)}`;
+  if (r.type === 'quarterly') return `Every 3 months on the ${ordinal(r.dom || 1)}`;
   if (r.type === 'custom') return (r.days || []).map(d => WEEKDAY_FULL[d]).join(', ') || 'Custom';
   return 'Custom';
 }
@@ -746,7 +757,7 @@ function emojiPicker(list, selected) {
 function openTaskModal(task, prefillTitle) {
   const editing = !!task;
   const t = task || { title: prefillTitle || '', emoji: 'book', category: 'homework', points: 10, recur: { type: 'daily', days: [], date: todayKey() }, reminder: '', durationMin: null, subtasks: [], dayTimes: {}, active: true };
-  const cur = { emoji: t.emoji, category: t.category, points: t.points, recurType: t.recur.type, days: (t.recur.days || []).slice(), steps: (t.subtasks || []).map(s => ({ id: s.id, title: s.title })), perDay: Object.keys(t.dayTimes || {}).length > 0, dayTimes: Object.assign({}, t.dayTimes || {}) };
+  const cur = { emoji: t.emoji, category: t.category, points: t.points, recurType: t.recur.type, dom: t.recur.dom || new Date().getDate(), days: (t.recur.days || []).slice(), steps: (t.subtasks || []).map(s => ({ id: s.id, title: s.title })), perDay: Object.keys(t.dayTimes || {}).length > 0, dayTimes: Object.assign({}, t.dayTimes || {}) };
   const { scrim, sheet } = openSheet(`
     <h2>${editing ? 'Edit quest' : 'New quest'}</h2>
     <p class="sheet-sub">${editing ? 'Update this quest.' : 'What do you need to get done?'}</p>
@@ -755,9 +766,10 @@ function openTaskModal(task, prefillTitle) {
     <div class="field"><span>Category</span><div class="chip-row" id="tCats">${CATEGORIES.map(c => `<button type="button" class="chip ${c.id === cur.category ? 'sel' : ''}" data-cat="${c.id}">${iconHTML(c.icon)} ${c.label}</button>`).join('')}</div></div>
     <div class="field"><span>Points reward</span><div class="stepper"><button type="button" data-step="-5">−</button><input id="tPoints" type="number" value="${cur.points}" min="1" max="500" inputmode="numeric" /><button type="button" data-step="5">+</button></div></div>
     <div class="field"><span>Repeats</span><div class="chip-row" id="tRecur">
-      ${['daily:Every day', 'weekdays:Weekdays', 'weekends:Weekends', 'custom:Pick days', 'once:Just once'].map(x => { const [v, l] = x.split(':'); return `<button type="button" class="chip ${v === cur.recurType ? 'sel' : ''}" data-recur="${v}">${l}</button>`; }).join('')}
+      ${['daily:Every day', 'weekdays:Weekdays', 'weekends:Weekends', 'custom:Pick days', 'monthly:Monthly', 'quarterly:Every 3 months', 'once:Just once'].map(x => { const [v, l] = x.split(':'); return `<button type="button" class="chip ${v === cur.recurType ? 'sel' : ''}" data-recur="${v}">${l}</button>`; }).join('')}
     </div></div>
     <div class="field" id="tDaysWrap" ${cur.recurType === 'custom' ? '' : 'hidden'}><span>On these days</span><div class="day-picker" id="tDays">${WEEKDAY_SHORT.map((d, i) => `<button type="button" class="${cur.days.includes(i) ? 'sel' : ''}" data-day="${i}">${d}</button>`).join('')}</div></div>
+    <label class="field" id="tDomWrap" ${cur.recurType === 'monthly' || cur.recurType === 'quarterly' ? '' : 'hidden'}><span>Day of the month</span><input id="tDom" type="number" value="${cur.dom}" min="1" max="31" inputmode="numeric" /><small class="field-hint">Every 3 months = Jan, Apr, Jul &amp; Oct.</small></label>
     <label class="field"><span>Start / reminder time (optional)</span><input id="tRemind" type="time" value="${t.reminder || ''}" /><small class="field-hint">I'll nudge you to start — and (with a focus length) tell you when to switch. Needs notifications on.</small></label>
     <div class="settings-row perday-row"><div class="sr-label"><b>Different time on some days?</b><small>e.g. later bedtime Fri &amp; Sat</small></div><div class="switch ${cur.perDay ? 'on' : ''}" id="tPerDay"></div></div>
     <div class="field" id="tDayWrap" ${cur.perDay ? '' : 'hidden'}><div id="tDayTimes"></div><small class="field-hint">Sets the time per day. Leave a day blank for no time that day.</small></div>
@@ -771,7 +783,7 @@ function openTaskModal(task, prefillTitle) {
   sheet.querySelector('.emoji-pick').addEventListener('click', e => { const b = e.target.closest('[data-emoji]'); if (!b) return; cur.emoji = b.dataset.emoji; sheet.querySelectorAll('.emoji-pick button').forEach(x => x.classList.toggle('sel', x === b)); });
   sheet.querySelector('#tCats').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; cur.category = b.dataset.cat; sheet.querySelectorAll('#tCats .chip').forEach(x => x.classList.toggle('sel', x === b)); });
   sheet.querySelectorAll('[data-step]').forEach(b => b.addEventListener('click', () => { const inp = sheet.querySelector('#tPoints'); inp.value = Math.max(1, (parseInt(inp.value) || 0) + parseInt(b.dataset.step)); }));
-  sheet.querySelector('#tRecur').addEventListener('click', e => { const b = e.target.closest('[data-recur]'); if (!b) return; cur.recurType = b.dataset.recur; sheet.querySelectorAll('#tRecur .chip').forEach(x => x.classList.toggle('sel', x === b)); sheet.querySelector('#tDaysWrap').hidden = cur.recurType !== 'custom'; });
+  sheet.querySelector('#tRecur').addEventListener('click', e => { const b = e.target.closest('[data-recur]'); if (!b) return; cur.recurType = b.dataset.recur; sheet.querySelectorAll('#tRecur .chip').forEach(x => x.classList.toggle('sel', x === b)); sheet.querySelector('#tDaysWrap').hidden = cur.recurType !== 'custom'; sheet.querySelector('#tDomWrap').hidden = cur.recurType !== 'monthly' && cur.recurType !== 'quarterly'; });
   sheet.querySelector('#tDays').addEventListener('click', e => { const b = e.target.closest('[data-day]'); if (!b) return; const dy = +b.dataset.day; const i = cur.days.indexOf(dy); if (i >= 0) cur.days.splice(i, 1); else cur.days.push(dy); b.classList.toggle('sel'); });
 
   // per-day times
@@ -828,6 +840,7 @@ function openTaskModal(task, prefillTitle) {
     const durationMin = parseInt(sheet.querySelector('#tDur').value) || null;
     const subtasks = cur.steps.map(s => ({ id: s.id || uid(), title: (s.title || '').trim() })).filter(s => s.title);
     const recur = { type: cur.recurType, days: cur.days.slice(), date: (task && task.recur.date) || todayKey() };
+    if (cur.recurType === 'monthly' || cur.recurType === 'quarterly') recur.dom = Math.min(31, Math.max(1, parseInt(sheet.querySelector('#tDom').value) || 1));
     const dayTimes = {};
     if (cur.perDay) activeDows().forEach(d => { if (cur.dayTimes[d] != null) dayTimes[d] = cur.dayTimes[d]; });
     if (editing) {
@@ -936,7 +949,17 @@ function exportData() {
 function importData(e) {
   const file = e.target.files[0]; if (!file) return;
   const r = new FileReader();
-  r.onload = () => { try { const data = JSON.parse(r.result); if (!data.tasks) throw 0; state = Object.assign(defaultState(), data); save(); location.reload(); } catch (err) { toast('⚠️', "That file couldn't be read."); } };
+  r.onload = () => { try {
+    const data = JSON.parse(r.result); if (!data.tasks) throw 0;
+    if (data.pack) {
+      // task pack: add its quests on top of what's already here (keeps points, settings, other quests)
+      data.tasks.forEach(t => state.tasks.push(Object.assign({ reminder: '', durationMin: null, dayTimes: {}, active: true }, t, {
+        id: uid(), createdAt: Date.now(), subtasks: (t.subtasks || []).map(s => ({ id: uid(), title: s.title || s })),
+      })));
+      state.onboarded = true; save(); location.reload(); return;
+    }
+    state = Object.assign(defaultState(), data); save(); location.reload();
+  } catch (err) { toast('⚠️', "That file couldn't be read."); } };
   r.readAsText(file);
 }
 
