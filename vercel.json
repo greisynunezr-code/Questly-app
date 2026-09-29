@@ -14,6 +14,10 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     },
     {
+      "source": "/packs/(.*)",
+      "headers": [{ "key": "Content-Disposition", "value": "attachment" }]
+    },
+    {
       "source": "/manifest.webmanifest",
       "headers": [{ "key": "Content-Type", "value": "application/manifest+json; charset=utf-8" }]
     }
